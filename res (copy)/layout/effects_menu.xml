@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ android:orientation="horizontal"
+ android:layout_width="fill_parent"
+ android:layout_height="fill_parent"
+ android:gravity="center">
+      <Button android:id="@+id/button_invert" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_vertical" android:background="@drawable/invert"/>
+      <Button android:id="@+id/button_edgedetect" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_vertical" android:background="@drawable/edgedetect"/>
+      <Button android:id="@+id/button_edgedetecttransparent" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_vertical" android:background="@drawable/edgedetect"/>
+      <Button android:id="@+id/button_highcontrast" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_vertical" android:background="@drawable/highcontrast"/>
+      <Button android:id="@+id/button_gray_scale" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_vertical" android:background="@drawable/grayscale"/>
+      <Button android:id="@+id/button_hue1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_vertical" android:background="@drawable/hue1"/>
+      <Button android:id="@+id/button_hue2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_vertical" android:background="@drawable/hue2"/>
+      <Button android:id="@+id/button_alpha1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_vertical" android:background="@drawable/alpha1"/>
+      <Button android:id="@+id/button_alpha2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_vertical" android:background="@drawable/alpha2"/>
+      <Button android:id="@+id/button_alpha3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_vertical" android:background="@drawable/alpha3"/>
+      <Button android:id="@+id/button_alpha4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_vertical" android:background="@drawable/alpha4"/>
+      <Button android:id="@+id/button_alpha5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_vertical" android:background="@drawable/alpha5"/>
+      <Button android:id="@+id/button_contrastbw" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_vertical" android:background="@drawable/highcontrastbw"/>
+      <Button android:id="@+id/button_grid" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_vertical" android:background="@drawable/grid"/>
+      <Button android:id="@+id/button_vertical" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_vertical" android:background="@drawable/vertical"/>
+      <Button android:id="@+id/button_horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_vertical" android:background="@drawable/horizontal"/>
+      <Button android:id="@+id/button_original" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_vertical" android:background="@drawable/icon64"/>
+  
+</LinearLayout>

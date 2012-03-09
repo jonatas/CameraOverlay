@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/aboutitem"
+          android:icon="@drawable/info"
+          android:title="@string/about" android:titleCondensed="@string/about"/>
+    <item android:id="@+id/takelayeredpic"
+          android:icon="@drawable/takelayeredpic"
+          android:title="@string/takelayeredpic" android:titleCondensed="@string/takelayeredpic" android:menuCategory="alternative"/>
+</menu>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Camera Overlay</string>
+    <string name="description">Picture Software with Overlay</string>
+    <string name="about">About</string>
+    <string name="takepicture">Take</string>
+    <string name="takenewpicture">New</string>
+    <string name="loadfile">Open</string>
+    <string name="developed">Developed By:</string>
+    <string name="project">Ideia.me</string>
+    <string name="url">http://ideia.me</string>
+    <string name="successsaved">Save successfully!</string>
+    <string name="dontsaved">Not saved! :(</string>
+    <string name="savingAs">Saving As: </string>
+    <string name="selectafile">Select a picture</string>
+    <string name="waitloadimages">Wait load images</string>
+    <string name="invert">Invert</string>
+    <string name="effectsgroup">Effects</string>
+    <string name="high_contrast">High Contrast</string>
+    <string name="gray_scale">Gray Scale</string>
+    <string name="hue1">Hue 1</string>
+    <string name="hue2">Hue 2</string>
+    <string name="alpha1">Green Alpha</string>
+    <string name="alpha2">Red Alpha</string>
+    <string name="alpha3">Blue Alpha</string>
+    <string name="alpha4">Black Alpha</string>
+    <string name="alpha5">White Alpha</string>
+    <string name="contrast_bw">Contrast black/white</string>
+    <string name="edgedetect">Edge Detect</string>
+    <string name="edgedetecttransparent">Alpha Edge Detector</string>
+    <string name="grid">Grid</string>
+    <string name="vertical">Vertical</string>
+    <string name="horizontal">Horizontal</string>
+    <string name="original">Original</string>
+    <string name="alpha">Transparency</string>
+    <string name="takelayeredpic">Take Pic with the actual layer</string>
+</resources>

@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ android:orientation="horizontal"
+ android:layout_width="fill_parent"
+ android:layout_height="wrap_content"
+ android:gravity="top|left"
+ >
+  <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="vertical" 
+      android:gravity="center"
+      android:padding="5dp"
+    android:background="#AAAA">
+	  <Button
+	      android:id="@+id/invert"
+	      android:layout_width="wrap_content"
+	      android:layout_height="wrap_content"
+		  android:background="@drawable/invert" />
+
+      <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/invert" />
+  </LinearLayout>
+<HorizontalScrollView
+    android:id="@+id/scrollEffects"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#AAAA" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" 
+            android:gravity="center"
+            android:padding="5dp">
+        <Button
+            android:id="@+id/edgedetect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edgedetect"
+            android:onClick="applyEffect" />
+        <TextView android:text="@string/edgedetect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" 
+            android:gravity="center"
+            android:padding="5dp">
+        <Button
+            android:id="@+id/edgedetecttransparent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edgedetect"
+            android:onClick="applyEffect" />
+        <TextView android:text="@string/edgedetecttransparent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" 
+            android:gravity="center"
+            android:padding="5dp">
+        <Button
+            android:id="@+id/highcontrast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/highcontrast"
+            android:onClick="applyEffect" />
+        <TextView android:text="@string/high_contrast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" 
+            android:gravity="center"
+            android:padding="5dp">
+        <Button
+            android:id="@+id/gray_scale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/grayscale"
+            android:onClick="applyEffect" />
+        <TextView android:text="@string/gray_scale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" 
+            android:gravity="center"
+            android:padding="5dp">
+        <Button
+            android:id="@+id/hue1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/hue1"
+            android:onClick="applyEffect" />
+        <TextView android:text="@string/hue1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" 
+            android:gravity="center"
+            android:padding="5dp">
+        <Button
+            android:id="@+id/hue2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/hue2"
+            android:onClick="applyEffect" />
+        <TextView android:text="@string/hue2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" 
+            android:gravity="center"
+            android:padding="5dp">
+        <Button
+            android:id="@+id/alpha1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/alpha1"
+            android:onClick="applyEffect" />
+        <TextView android:text="@string/alpha1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" 
+            android:gravity="center"
+            android:padding="5dp">
+        <Button
+            android:id="@+id/alpha2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/alpha2"
+            android:onClick="applyEffect" />
+        <TextView android:text="@string/alpha2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" 
+            android:gravity="center"
+            android:padding="5dp">
+        <Button
+            android:id="@+id/alpha3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/alpha3"
+            android:onClick="applyEffect" />
+        <TextView android:text="@string/alpha3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" 
+            android:gravity="center"
+            android:padding="5dp">
+        <Button
+            android:id="@+id/alpha4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/alpha4"
+            android:onClick="applyEffect" />
+        <TextView android:text="@string/alpha4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" 
+            android:gravity="center"
+            android:padding="5dp">
+        <Button
+            android:id="@+id/alpha5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/alpha5"
+            android:onClick="applyEffect" />
+        <TextView android:text="@string/alpha5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" 
+            android:gravity="center"
+            android:padding="5dp">
+        <Button
+            android:id="@+id/contrastbw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/contrastbw"
+            android:onClick="applyEffect" />
+        <TextView android:text="@string/contrast_bw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" 
+            android:gravity="center"
+            android:padding="5dp">
+        <Button
+            android:id="@+id/original"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/icon64"
+            android:onClick="applyEffect" />
+        <TextView android:text="@string/original"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+    </LinearLayout>
+    
+
+</HorizontalScrollView>
+</LinearLayout>

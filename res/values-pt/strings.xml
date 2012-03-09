@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Camera Overlay</string>
+    <string name="description">Software de foto com sobreposição</string>
+    <string name="about">Sobre</string>
+    <string name="takepicture">Foto</string>
+    <string name="takenewpicture">Nova</string>
+    <string name="loadfile">Abrir</string>
+    <string name="developed">Desenvolvido por:</string>
+    <string name="project">Ideia.me</string>
+    <string name="url">http://ideia.me</string>
+    <string name="successsaved">Salvo com sucesso!</string>
+    <string name="dontsaved">Não salvou! :(</string>
+    <string name="savingAs">Salvando como: </string>
+    <string name="selectafile">Selecione uma foto</string>
+    <string name="waitloadimages">Aguarde carregar as imagens</string>
+    <string name="invert">Negativo</string>
+    <string name="effectsgroup">Efeitos</string>
+    <string name="high_contrast">Alto Contraste</string>
+    <string name="gray_scale">Tons de Cinza</string>
+    <string name="hue1">Matiz 1</string>
+    <string name="hue2">Matiz 2</string>
+    <string name="alpha1">Sem Verde</string>
+    <string name="alpha2">Sem Vermelho</string>
+    <string name="alpha3">Sem Azul</string>
+    <string name="alpha4">Sem Preto</string>
+    <string name="alpha5">Sem Branco</string>
+    <string name="contrast_bw">Contraste P/B</string>
+    <string name="edgedetect">Com bordas</string>
+    <string name="edgedetecttransparent">Com bordas Transparente</string>
+    <string name="grid">Quadriculado</string>
+    <string name="vertical">Vertical</string>
+    <string name="horizontal">Horizontal</string>
+    <string name="original">Original</string>    <string name="alpha">Transparência</string>
+</resources>

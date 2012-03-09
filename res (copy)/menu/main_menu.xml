@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/aboutitem"
+          android:icon="@drawable/info"
+          android:title="@string/about" android:titleCondensed="@string/about"/>
+    <item android:id="@+id/takelayeredpic"
+          android:icon="@drawable/takelayeredpic"
+          android:title="@string/takelayeredpic" android:titleCondensed="@string/takelayeredpic" android:menuCategory="alternative"/>
+  
+    <item android:id="@+id/effectsgroup"
+          android:title="@string/effectsgroup" android:titleCondensed="@string/effectsgroup">
+        <menu>
+            <item android:id="@+id/invert" android:title="@string/invert" android:titleCondensed="@string/invert" android:icon="@drawable/invert"/>
+            <item android:id="@+id/edgedetect" android:title="@string/edgedetect" android:titleCondensed="@string/edgedetect" android:icon="@drawable/edgedetect"/>
+            <item android:id="@+id/edgedetecttransparent" android:title="@string/edgedetecttransparent" android:titleCondensed="@string/edgedetecttransparent" android:icon="@drawable/edgedetect"/>
+            <item android:id="@+id/highcontrast" android:title="@string/high_contrast" android:titleCondensed="@string/high_contrast" android:icon="@drawable/highcontrast"/>
+            <item android:id="@+id/gray_scale" android:title="@string/gray_scale" android:titleCondensed="@string/gray_scale" android:icon="@drawable/grayscale"/>
+            <item android:id="@+id/hue1" android:title="@string/hue1" android:titleCondensed="@string/hue1" android:icon="@drawable/hue1"/>
+            <item android:id="@+id/hue2" android:title="@string/hue2" android:titleCondensed="@string/hue2" android:icon="@drawable/hue2"/>
+            <item android:id="@+id/alpha1" android:title="@string/alpha1" android:titleCondensed="@string/alpha1" android:icon="@drawable/alpha1"/>
+            <item android:id="@+id/alpha2" android:title="@string/alpha2" android:titleCondensed="@string/alpha2" android:icon="@drawable/alpha2"/>
+            <item android:id="@+id/alpha3" android:title="@string/alpha3" android:titleCondensed="@string/alpha3" android:icon="@drawable/alpha3"/>
+            <item android:id="@+id/alpha4" android:title="@string/alpha4" android:titleCondensed="@string/alpha4" android:icon="@drawable/alpha4"/>
+            <item android:id="@+id/alpha5" android:title="@string/alpha5" android:titleCondensed="@string/alpha5" android:icon="@drawable/alpha5"/>
+            <item android:id="@+id/contrastbw" android:title="@string/contrast_bw" android:titleCondensed="@string/contrast_bw" android:icon="@drawable/highcontrastbw"/>
+            <item android:id="@+id/grid" android:title="@string/grid" android:titleCondensed="@string/grid" android:icon="@drawable/grid"/>
+            <item android:id="@+id/vertical" android:title="@string/vertical" android:titleCondensed="@string/vertical" android:icon="@drawable/vertical"/>
+            <item android:id="@+id/horizontal" android:title="@string/horizontal" android:titleCondensed="@string/horizontal" android:icon="@drawable/horizontal"/>
+            <item android:id="@+id/original" android:title="@string/original" android:titleCondensed="@string/original" android:icon="@drawable/icon64"/>
+        </menu>
+    </item>
+</menu>
