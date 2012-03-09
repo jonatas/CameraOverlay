@@ -59,7 +59,7 @@
             android:id="@+id/edgedetecttransparent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/edgedetect"
+            android:background="@drawable/edgedetecttransparent"
             android:onClick="applyEffect" />
         <TextView android:text="@string/edgedetecttransparent"
             android:layout_width="wrap_content"

@@ -24,7 +24,7 @@ import android.text.Html.TagHandler;
 import android.util.Log;
 import android.view.View;
 
-public class DrawOnTop extends View {
+public class PhotoEffects extends View {
 
 	private Bitmap bmp = null;
 	private Bitmap bmpOriginal = null;
@@ -36,16 +36,18 @@ public class DrawOnTop extends View {
 	private int horizontal = 100;
 	private int grid = 100;
 	private boolean inverted = false;
-	private boolean semFotoSelecionada = true;
-
+	private boolean pictureNotSelected = true;
+    private boolean mixEffects = true;
+    
+    
 	public void selectedPicture() {
-		semFotoSelecionada = false;
+		pictureNotSelected = false;
 	}
 	public boolean withoutPicture() {
-		return semFotoSelecionada;
+		return pictureNotSelected;
 	}
 
-	public DrawOnTop(Context context) {
+	public PhotoEffects(Context context) {
 		super(context);
 		invalidate();
 	}
@@ -83,7 +85,7 @@ public class DrawOnTop extends View {
 		width = canvas.getWidth();
 		if (bmp == null) {
 			setBitmap(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.image));
-			semFotoSelecionada  = true;
+			pictureNotSelected  = true;
 		} else {
 			Paint paint = new Paint();
 			paint.setStyle(Paint.Style.FILL);
@@ -307,67 +309,18 @@ public class DrawOnTop extends View {
 		cm.applyConfig(new double[][]{	{2,3,-3},
 				{1,-1,1},
 				{-2,1,-2}});
-		bmp = cm.computeConvolution3x3(bmpOriginal);
+		bmp = cm.computeConvolution3x3(bmp);
 		invalidate();
 	}
 
-
 	public void edgeDetectTransparent() {
-		ConvolutionMatrix cm = new ConvolutionMatrix();
-		cm.applyConfig(new double[][]{	{2,3,-3},
-				{1,-1,1},
-				{-2,1,-2}});
-		bmp = cm.computeConvolution3x3(bmpOriginal);
-		bmp = alpha4(bmp);
+		edgeDetect();
+	    alpha4();
 		invalidate();
 	}
 
 	public void invert() {
 		bmp = convertToNegative(bmp);
-		invalidate();
-	}
-
-	public void applyEffect() {
-		switch (currentEffect) {
-		case 0:
-			bmp = convertToNegative(bmpOriginal);
-			break;
-		case 1:
-			bmp = contrastBW(bmpOriginal);
-			break;
-		case 2:
-			bmp = grayScale(bmpOriginal);
-			break;
-		case 3:
-			bmp = hue1(bmpOriginal);
-			break;
-		case 4:
-			bmp = hue2(bmpOriginal);
-			break;
-		case 5:
-			bmp = alpha1(bmpOriginal);
-			break;
-		case 6:
-			bmp = alpha2(bmpOriginal);
-			break;
-		case 7:
-			bmp = alpha3(bmpOriginal);
-			break;
-		case 8:
-			bmp = alpha4(bmpOriginal);
-			break;
-		case 9:
-			bmp = alpha5(bmpOriginal);
-			break;
-		case 10:
-			bmp = bmpOriginal;
-			currentEffect = -1;
-			break;
-		default:
-			currentEffect = -1;
-			break;
-		}
-		currentEffect++;
 		invalidate();
 	}
 
@@ -378,44 +331,46 @@ public class DrawOnTop extends View {
 	}
 
 	public void highContrast() {
-		bmp = highContrast(bmpOriginal);
+		bmp = highContrast(bmp);
 		invalidate();
 	}
+	
 	public  void contrastBW() {
-		bmp = contrastBW(bmpOriginal);
+		bmp = contrastBW(bmp);
 		invalidate();
 	}
 
 	public void alpha1() {
-		bmp = alpha1(bmpOriginal);
+		bmp = alpha1(bmp);
 		invalidate();
 	}
+	
 	public void alpha2() {
-		bmp = alpha2(bmpOriginal);
+		bmp = alpha2(bmp);
 		invalidate();
 	}
 	public void alpha3() {
-		bmp = alpha3(bmpOriginal);
+		bmp = alpha3(bmp);
 		invalidate();
 	}
 	public void alpha4() {
-		bmp = alpha4(bmpOriginal);
+		bmp = alpha4(bmp);
 		invalidate();
 	}
 	public void alpha5() {
-		bmp = alpha5(bmpOriginal);
+		bmp = alpha5(bmp);
 		invalidate();
 	}
 	public void grayScale() {
-		bmp = grayScale(bmpOriginal);
+		bmp = grayScale(bmp);
 		invalidate();
 	}
 	public void hue1() {
-		bmp = hue1(bmpOriginal);
+		bmp = hue1(bmp);
 		invalidate();
 	}
 	public void hue2() {
-		bmp = hue2(bmpOriginal);
+		bmp = hue2(bmp);
 		invalidate();
 	}
 	public void grid(int size) {
@@ -460,13 +415,13 @@ public class DrawOnTop extends View {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
 			Paint paint = new Paint();
 			paint.setStyle(Paint.Style.FILL);
-
-			paint.setAlpha(this.alpha);
-			paint.setFilterBitmap(true);
+    		paint.setFilterBitmap(true);
+		
 			layered.drawBitmap(bmpOriginal, 0, 0, paint);
+			paint.setAlpha(this.alpha);
 			layered.drawBitmap(bmp, 0, 0, paint);
 
-			BitmapDrawable mBitmapDrawable = new BitmapDrawable(bmp);
+			BitmapDrawable mBitmapDrawable = new BitmapDrawable();
 			Bitmap mNewSaving = ((BitmapDrawable)mBitmapDrawable).getBitmap();
 
 			File mFile = new File("/sdcard/CameraOverlay/"+sdf.format(new Date()) +".png");

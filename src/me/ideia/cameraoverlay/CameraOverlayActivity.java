@@ -49,7 +49,7 @@ public class CameraOverlayActivity extends Activity {
 	SurfaceHolder surfaceHolder;
 	boolean previewing = false;
 	LayoutInflater controlInflater = null;
-	DrawOnTop photoBase;
+	PhotoEffects photoBase;
 	View effects;
 	
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
@@ -224,7 +224,7 @@ public class CameraOverlayActivity extends Activity {
 		preview = new Preview(this);
 		this.setContentView(preview);
 
-		photoBase = new DrawOnTop(this);
+		photoBase = new PhotoEffects(this);
 
 		controlInflater = LayoutInflater.from(getBaseContext());
 		View viewControl = controlInflater.inflate(R.layout.main, null);
