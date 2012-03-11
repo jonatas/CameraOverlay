@@ -33,4 +33,16 @@
     <string name="horizontal">Cortes horizontales</string>
     <string name="original">Original</string>
     <string name="alpha">Transparencia</string>
+    <string name="preferences">Preferencias</string>
+    <string name="mix_effects_summary">permitir efectos de mezcla en la foto seleccionada</string>
+    <string name="mix_effects_title">Efectos de mezcla </string>
+    <string name="savingLayeredPicAs">Pic was saved with the current effect</string>
+    <string name="error_get_camera_preview">Error al intentar obtener previa de la cámara</string>
+    <string name="retry">Vuelva a intentar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="set_new_directory_to_camera_overlay">Establecer el directorio predeterminado de superposición de cámara, tal vez usted no tiene un sdcard</string>
+    <string name="title_camera_overlay_directory">Camera Overlay Directorio</string>
+    <string name="pref_where_save">¿Dónde guarda las fotos</string>
+    <string name="help_about_camera_overlay_directory">Es el directorio que guarda todas las imágenes cuando se tomó la base de la primera foto en lugar de utilizar su álbum</string>
+    <string name="default_settings">Configuración</string>
 </resources>

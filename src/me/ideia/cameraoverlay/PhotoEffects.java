@@ -1,17 +1,9 @@
 package me.ideia.cameraoverlay;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import pete.android.study.ConvolutionMatrix;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -20,10 +12,7 @@ import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.drawable.BitmapDrawable;
 import android.preference.PreferenceManager;
-import android.text.Html.TagHandler;
-import android.util.Log;
 import android.view.View;
 
 public class PhotoEffects extends View {
@@ -92,12 +81,7 @@ public class PhotoEffects extends View {
 			setBitmap(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.image));
 			pictureNotSelected  = true;
 		} else {
-			Paint paint = new Paint();
-			paint.setStyle(Paint.Style.FILL);
-
-			paint.setAlpha(this.alpha);
-			paint.setFilterBitmap(true);
-			canvas.drawBitmap(bmp, 0, 0, paint);
+		    canvas.drawBitmap(bmp, 0, 0, getPaint());
 			super.onDraw(canvas);
 		}
 	}
@@ -106,6 +90,14 @@ public class PhotoEffects extends View {
 		this.alpha = progress;
 		invalidate();
 
+	}
+	public Paint getPaint() {
+		Paint paint = new Paint();
+		paint.setStyle(Paint.Style.FILL);
+
+		paint.setAlpha(this.alpha);
+		paint.setFilterBitmap(true);
+		return paint;
 	}
 
 	public Bitmap grid( Bitmap source, int size ) {

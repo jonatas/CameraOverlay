@@ -6,27 +6,24 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.PixelFormat;
-import android.graphics.Bitmap.CompressFormat;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.SweepGradient;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -43,14 +40,14 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-// TODO: Menu flutuante para seleção de efeitos
 // TODO: Long click take screen shot -> big long click salva foto com o efeito atual sem foto base
-// TODO: Configurações da camera
+// TODO: Configurações da camera 
 // TODO: Gravar ultima imagem e recarregar na abertura da aplicação
 // TODO: Gravar configuraçoes e permitir carregar retornando ao estado "preferido"
 // TODO: Redimensionamento da imagem base na view está distorcida -> nao casa com a camera
-// TODO: (bloqueia escurecimento da tela)
-// TODO: Camera preview nao resgata a camera
+// TODO: (bloqueia escurecimento da tela) - ok
+// TODO: Camera preview nao resgata a camera -> ok
+// TODO: Menu flutuante para seleção de efeitos -> ok
 // TODO: Controle de brilho da tela -> ok
 
 
@@ -84,9 +81,7 @@ public class CameraOverlayActivity extends Activity {
 			final Button switchEffect = (Button)findViewById(R.id.switchEffect);
 			final ProgressBar loadingSE = (ProgressBar)findViewById(R.id.loadingSE);
 			final ProgressBar loadingSSE = (ProgressBar)findViewById(R.id.loadingSSE);
-	    	final SeekBar alphaValue = (SeekBar) findViewById(R.id.alphaValue);
 			final Button switchSeekEffect = (Button) findViewById(R.id.switchSeekEffect);
-			final TextView switchSeekEffectLabel = (TextView) findViewById(R.id.switchSeekEffectLabel);
 			final TextView switchEffectLabel = (TextView) findViewById(R.id.switchEffectLabel);
 			switch (v.getId()) {
 	            case R.id.alpha1: case R.id.alpha2: case R.id.alpha3: case R.id.alpha4:
@@ -239,7 +234,6 @@ public class CameraOverlayActivity extends Activity {
 		effects.setVisibility(View.GONE);
 		LayoutParams layoutParamsEffects = new LayoutParams(
 				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-		View scroll = findViewById(R.id.scrollEffects);
 		this.addContentView(effects, layoutParamsEffects);
 		
 
@@ -261,9 +255,34 @@ public class CameraOverlayActivity extends Activity {
 		takePicture.setOnLongClickListener(new View.OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View v) {
-                View mainView = v.getRootView();
+                View mainView = v.getRootView();				
+                HashMap<View, Integer> buttonStateSnapshot = new HashMap<View, Integer>();
+				
+                for (View icon : mainView.getTouchables()) {
+                	buttonStateSnapshot.put(icon, takePicture.getVisibility());
+                	icon.setVisibility(View.GONE);
+				}
+            	
                 mainView.setDrawingCacheEnabled(true);
                 Bitmap bitmap = mainView.getDrawingCache();
+                Canvas canvas = new Canvas(bitmap);
+                Bitmap shot = preview.getDrawingCache();
+                String filename = picFileName(".jpg");;
+				if (shot == null){
+                	preview.takePicture(filename);
+			     	try {
+						shot = getBitmapFromString(filename);
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				if (shot != null)
+			    	canvas.drawBitmap(shot, 0, 0, photoBase.getPaint());
+				
+                for (View icon : mainView.getTouchables()) {
+                	icon.setVisibility(buttonStateSnapshot.get(icon));
+				}
 	            
 	            try {
 	            	FileOutputStream fos = newPicFile(".png");
@@ -286,9 +305,15 @@ public class CameraOverlayActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				if (photoBase.withoutPicture()) {
-					Uri uri = Uri.fromFile(new File(preview.file));
+					
 					basefile = preview.file;
-					loadBaseImage(uri);
+					
+					try {
+						loadBaseImage(getBitmapFromString(preview.file));
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				takePicture.setVisibility(View.VISIBLE);
 				takeNewPicture.setVisibility(View.GONE);
@@ -363,7 +388,6 @@ public class CameraOverlayActivity extends Activity {
 			}
 		});
 
-		
 		switchSeekEffect.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -444,7 +468,12 @@ public class CameraOverlayActivity extends Activity {
 			Uri selectedImage = imageReturnedIntent.getData();
 			basefile = preview.file;
 			getRealPathFromURI(selectedImage);
-			loadBaseImage(selectedImage);
+			try {
+				loadBaseImage(getBitmapFromURI(selectedImage));
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		try {
 			preview.startCamera();
@@ -454,16 +483,27 @@ public class CameraOverlayActivity extends Activity {
 		}
 	}
 
-	private void loadBaseImage(Uri selectedImage) {
+	private void loadBaseImage(Bitmap bmp ) {
 		try {
-			InputStream imageStream = getContentResolver().openInputStream(selectedImage);
-			Bitmap bmp = BitmapFactory.decodeStream(imageStream);
+			
 			photoBase.setBitmap(bmp);
 			photoBase.selectedPicture();
 		} catch (Exception e) {
 			toast("Ops!" + e.getMessage());
 			e.printStackTrace();
 		}
+	}
+
+	public Bitmap getBitmapFromString(String src)
+			throws FileNotFoundException {
+		Uri uri = Uri.fromFile(new File(src));
+		return getBitmapFromURI(uri);
+	}
+		public Bitmap getBitmapFromURI(Uri uri )
+		throws FileNotFoundException {
+		InputStream imageStream = getContentResolver().openInputStream(uri);
+		Bitmap bmp = BitmapFactory.decodeStream(imageStream);
+		return bmp;
 	}
 
 	public void toast(String dados) {

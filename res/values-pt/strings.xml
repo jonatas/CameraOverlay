@@ -31,5 +31,18 @@
     <string name="grid">Quadriculado</string>
     <string name="vertical">Vertical</string>
     <string name="horizontal">Horizontal</string>
-    <string name="original">Original</string>    <string name="alpha">Transparência</string>
+    <string name="original">Original</string>    
+    <string name="alpha">Transparência</string>
+     <string name="preferences">Preferências</string>
+    <string name="mix_effects_summary">Misturar efeitos na foto selecionada</string>
+    <string name="mix_effects_title">Efeitos</string>
+    <string name="savingLayeredPicAs">A imagem foi salva sobre a imagem base com o efeito atual</string>
+    <string name="error_get_camera_preview">Erro tentando usar a visualização da camera</string>
+    <string name="retry">Tentar novamente</string>
+    <string name="cancel">Cancelar</string>
+    <string name="set_new_directory_to_camera_overlay">Altere o diretório padrão do Camera Overlay, talvez você não tenha um sdcard...</string>
+    <string name="title_camera_overlay_directory">Diretório de destino das fotos</string>
+    <string name="pref_where_save">Onde salvar as fotos</string>
+    <string name="help_about_camera_overlay_directory">Esse é o diretório onde ficam todas as fotos em que até a foto base é tirada pelo Camera Overlay</string>
+    <string name="default_settings">Configurações</string>
 </resources>

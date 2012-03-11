@@ -84,7 +84,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 				outStream.flush();
 				outStream.close();
 			} catch (Exception e) {
-				Log.d("Camera", e.getMessage());
+		//		Log.d("Camera", e.getMessage());
 				((CameraOverlayActivity)getContext()).toast("Exception! " + e.getMessage());
 			}
 
