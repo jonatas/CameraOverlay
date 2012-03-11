@@ -9,6 +9,7 @@ import java.util.Date;
 
 import pete.android.study.ConvolutionMatrix;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Bitmap.Config;
@@ -20,6 +21,7 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
+import android.preference.PreferenceManager;
 import android.text.Html.TagHandler;
 import android.util.Log;
 import android.view.View;
@@ -28,7 +30,6 @@ public class PhotoEffects extends View {
 
 	private Bitmap bmp = null;
 	private Bitmap bmpOriginal = null;
-	private int currentEffect = 0;
 	private int alpha = 128;
 	private int height = 0;
 	private int width = 0;
@@ -37,9 +38,8 @@ public class PhotoEffects extends View {
 	private int grid = 100;
 	private boolean inverted = false;
 	private boolean pictureNotSelected = true;
-    private boolean mixEffects = true;
-    
-    
+	private SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+	
 	public void selectedPicture() {
 		pictureNotSelected = false;
 	}
@@ -55,28 +55,33 @@ public class PhotoEffects extends View {
 	public void setBitmap(Bitmap bitmap) {
 		if (height > 0 && width > 0) {
 
-			Bitmap resized;
-			if (bitmap.getHeight() > bitmap.getWidth()) {
-				float curScaleX;
-				float curScaleY;
-				curScaleX = width / bitmap.getHeight();
-				curScaleY = height / bitmap.getWidth();
-
-				Matrix matrix = new Matrix();
-				matrix.postScale(curScaleX, curScaleY);
-				matrix.postRotate(-90);
-
-				resized = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
-						bitmap.getHeight(), matrix, true);
-			} else {
-				resized = Bitmap.createScaledBitmap(bitmap, width, height,
-						true);
-			}
+			Bitmap resized = resizeBitmap(bitmap);
 			bmp = resized;
 			bmpOriginal = resized;
 			inverted = false;
+			
 		}
 		invalidate();
+	}
+	public Bitmap resizeBitmap(Bitmap bitmap) {
+		Bitmap resized;
+		if (bitmap.getHeight() > bitmap.getWidth()) {
+			float curScaleX;
+			float curScaleY;
+			curScaleX = width / bitmap.getHeight();
+			curScaleY = height / bitmap.getWidth();
+
+			Matrix matrix = new Matrix();
+			matrix.postScale(curScaleX, curScaleY);
+			matrix.postRotate(-90);
+
+			resized = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+					bitmap.getHeight(), matrix, true);
+		} else {
+			resized = Bitmap.createScaledBitmap(bitmap, width, height,
+					true);
+		}
+		return resized;
 	}
 
 	@Override
@@ -309,7 +314,7 @@ public class PhotoEffects extends View {
 		cm.applyConfig(new double[][]{	{2,3,-3},
 				{1,-1,1},
 				{-2,1,-2}});
-		bmp = cm.computeConvolution3x3(bmp);
+		bmp = cm.computeConvolution3x3(currentImage());
 		invalidate();
 	}
 
@@ -325,53 +330,56 @@ public class PhotoEffects extends View {
 	}
 
 	public void resetEffect() {
-		currentEffect = 0;
 		bmp = bmpOriginal;
 		invalidate();
 	}
 
 	public void highContrast() {
-		bmp = highContrast(bmp);
+		bmp = highContrast(currentImage());
 		invalidate();
 	}
 	
 	public  void contrastBW() {
-		bmp = contrastBW(bmp);
+		bmp = contrastBW(currentImage());
 		invalidate();
 	}
 
 	public void alpha1() {
-		bmp = alpha1(bmp);
+		bmp = alpha1(currentImage());
 		invalidate();
 	}
 	
 	public void alpha2() {
-		bmp = alpha2(bmp);
+		bmp = alpha2(currentImage());
 		invalidate();
 	}
 	public void alpha3() {
-		bmp = alpha3(bmp);
+		bmp = alpha3(currentImage());
 		invalidate();
 	}
 	public void alpha4() {
-		bmp = alpha4(bmp);
+		bmp = alpha4(currentImage());
 		invalidate();
 	}
 	public void alpha5() {
-		bmp = alpha5(bmp);
+		bmp = alpha5(currentImage());
 		invalidate();
 	}
 	public void grayScale() {
-		bmp = grayScale(bmp);
+		bmp = grayScale(currentImage());
 		invalidate();
 	}
 	public void hue1() {
-		bmp = hue1(bmp);
+		bmp = hue1(currentImage());
 		invalidate();
 	}
 	public void hue2() {
-		bmp = hue2(bmp);
+		bmp = hue2(currentImage());
 		invalidate();
+	}
+	private Bitmap currentImage() {
+		
+		return preferences.getBoolean("mix_effects", false) ? bmp : bmpOriginal;
 	}
 	public void grid(int size) {
 		grid = size;
@@ -408,39 +416,8 @@ public class PhotoEffects extends View {
 	public boolean isInverted() {
 		return inverted;
 	}
-	public void takeLayeredPic() {
-		try
-		{
-			Canvas layered = new Canvas(Bitmap.createBitmap(bmp.getHeight(),bmp.getWidth(), Bitmap.Config.ARGB_4444));
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
-			Paint paint = new Paint();
-			paint.setStyle(Paint.Style.FILL);
-    		paint.setFilterBitmap(true);
-		
-			layered.drawBitmap(bmpOriginal, 0, 0, paint);
-			paint.setAlpha(this.alpha);
-			layered.drawBitmap(bmp, 0, 0, paint);
-
-			BitmapDrawable mBitmapDrawable = new BitmapDrawable();
-			Bitmap mNewSaving = ((BitmapDrawable)mBitmapDrawable).getBitmap();
-
-			File mFile = new File("/sdcard/CameraOverlay/"+sdf.format(new Date()) +".png");
-			FileOutputStream mFileOutputStream = new FileOutputStream(mFile);
-
-			mNewSaving.compress(CompressFormat.PNG, 100, mFileOutputStream);
-			mFileOutputStream.flush();
-			mFileOutputStream.close();
-
-		}
-		catch (FileNotFoundException e)
-		{
-			Log.v("FileNotFoundException", e.toString());
-		}
-		catch (IOException e)
-		{
-			Log.v("IOExceptionError ", e.toString());
-		}		
-
+	public Bitmap getBmp() {
+		return bmp;
 	}
 
 }

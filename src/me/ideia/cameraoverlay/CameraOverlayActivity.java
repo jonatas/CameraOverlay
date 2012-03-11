@@ -1,21 +1,32 @@
 package me.ideia.cameraoverlay;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -55,7 +66,6 @@ public class CameraOverlayActivity extends Activity {
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
     static String basefile;
 
-    private int effect = -1;
     private int seekEffect = 0;
     
     @Override
@@ -86,19 +96,13 @@ public class CameraOverlayActivity extends Activity {
 	            	loadingSE.setVisibility(View.VISIBLE);
 	            	switchEffect.setVisibility(View.INVISIBLE);
 	            	break;
-//	            case R.id.grid: case R.id.horizontal: case R.id.vertical:
-//	            	loadingSSE.setVisibility(View.VISIBLE);
-//	            	switchSeekEffect.setVisibility(View.INVISIBLE);
 	        }
 
 			new Handler().postDelayed(new Thread() {
 				@Override
 				public void run() {
 			        switch (v.getId()) {
-			            case R.id.aboutitem:
-							Intent activity = new Intent(CameraOverlayActivity.this, AboutActivity.class);
-							startActivity(activity);
-							break;
+			            
 			            case R.id.invert:
 							photoBase.invert();
 			                break;
@@ -162,36 +166,11 @@ public class CameraOverlayActivity extends Activity {
 			            	switchEffect.setBackgroundResource(R.drawable.edgedetect);
 							switchEffectLabel.setText(getString(R.string.edgedetecttransparent));
 			                break;
-//			            case R.id.grid:
-//			            	mDraw.grid(10);
-//			            	seekEffect = 1;
-//							alphaValue.setProgress(mDraw.getGrid() * 255 / 100);
-//							switchSeekEffect.setBackgroundResource(R.drawable.grid);
-//							switchSeekEffectLabel.setText(getString(R.string.grid));
-//			                break;
-//			            case R.id.horizontal:
-//			            	mDraw.horizontal(10);
-//			            	seekEffect = 2;
-//							alphaValue.setProgress(mDraw.getHorizontal() * 255 / 100);
-//							switchSeekEffect.setBackgroundResource(R.drawable.horizontal);
-//							switchSeekEffectLabel.setText(getString(R.string.horizontal));
-//			                break;
-//			            case R.id.vertical:
-//			            	mDraw.vertical(10);
-//			            	seekEffect = 3;
-//							alphaValue.setProgress(mDraw.getVertical() * 255 / 100);
-//							switchSeekEffect.setBackgroundResource(R.drawable.vertical);
-//							switchSeekEffectLabel.setText(getString(R.string.vertical));
-//			                break;
 			            case R.id.original:
 			            	photoBase.resetEffect();
 			            	switchEffect.setBackgroundResource(R.drawable.icon64);
 							switchEffectLabel.setText(getString(R.string.original));
 			                break;
-			            case R.id.takelayeredpic:
-							photoBase.takeLayeredPic();
-			                break;
-			            
 			        }
 			        running = false;
 	            	loadingSE.setVisibility(View.INVISIBLE);
@@ -202,7 +181,29 @@ public class CameraOverlayActivity extends Activity {
 			}, 10);
     	}
     }
-
+    
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    	// TODO Auto-generated method stub
+    	switch (item.getItemId()){
+    	case R.id.aboutitem:
+    		Intent activity = new Intent(CameraOverlayActivity.this, AboutActivity.class);
+    		startActivity(activity);
+    		break;
+    	case R.id.preferences:
+    		Intent preferences = new Intent(CameraOverlayActivity.this, PreferencesActivity.class);
+    		startActivity(preferences);
+    		break;
+    	}
+    	return super.onMenuItemSelected(featureId, item);
+    }
+    public String picFileName(String format){
+    	return getSdcardCameraOverlay()+"/"+
+		 (new SimpleDateFormat("yyyyMMddHHmm").format(new Date())) +format;
+    }
+    public FileOutputStream newPicFile(String format) throws FileNotFoundException {
+    	 return new FileOutputStream( new File(picFileName(format)) );
+    }
     /** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -216,7 +217,7 @@ public class CameraOverlayActivity extends Activity {
 		setFullBrightness();
 		
 		try {
-			File dir = new File("/sdcard/CameraOverlay");
+			File dir = new File(getSdcardCameraOverlay());
 			if (!dir.exists()) dir.mkdir();
 		} catch (Exception e) {
 		}
@@ -248,13 +249,34 @@ public class CameraOverlayActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				if (basefile == null) {
-					basefile = "/sdcard/CameraOverlay/image" + sdf.format(new Date()) + ".jpg";
+					basefile = picFileName(".jpg");
 				}
 				preview.takePicture(basefile);
 				takePicture.setVisibility(View.GONE);
 				Button takeNewPicture = (Button) findViewById(R.id.takenewpicture);
 				takeNewPicture.setVisibility(View.VISIBLE);
-				mensagemTemporaria(getString(R.string.savingAs) + preview.file);
+				toast(getString(R.string.savingAs) + preview.file);
+			}
+		});
+		takePicture.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+                View mainView = v.getRootView();
+                mainView.setDrawingCacheEnabled(true);
+                Bitmap bitmap = mainView.getDrawingCache();
+	            
+	            try {
+	            	FileOutputStream fos = newPicFile(".png");
+	                bitmap.compress(Bitmap.CompressFormat.PNG, 90, fos);
+	                fos.close();
+	            } catch (FileNotFoundException e) {
+	            	toast("Arquivo não encontrado ");
+	            } catch (IOException e) {
+	            	toast("IO Error");
+	            }
+
+				toast(getString(R.string.savingLayeredPicAs) + preview.file);
+				return false;
 			}
 		});
 		
@@ -289,7 +311,7 @@ public class CameraOverlayActivity extends Activity {
 					photo.setType("image/*");
 					startActivityForResult(photo, 1);
 				} catch (Exception e) {
-					mensagemTemporaria(getString(R.string.waitloadimages));
+					toast(getString(R.string.waitloadimages));
 				}
 
 				takePicture.setVisibility(View.VISIBLE);
@@ -389,97 +411,6 @@ public class CameraOverlayActivity extends Activity {
 				}, 10);
 			}
 		});
-		final Button switchEffect = (Button) findViewById(R.id.switchEffect);
-//		switchEffect.setOnClickListener(new View.OnClickListener() {
-//
-//			@Override
-//			public void onClick(View arg0) {
-//				final TextView switchEffectLabel = (TextView) findViewById(R.id.switchEffectLabel);
-//
-//				final ProgressBar loadingSE = (ProgressBar) findViewById(R.id.loadingSE);
-//            	loadingSE.setVisibility(View.VISIBLE);
-//            	switchEffect.setVisibility(View.INVISIBLE);
-//				new Handler().postDelayed(new Thread() {
-//					@Override
-//					public void run() {
-//						effect++;
-//						if (effect > 12)
-//							effect = 0;
-//						switch (effect) {
-//						case 0:
-//			            	mDraw.alpha1();
-//							switchEffect.setBackgroundResource(R.drawable.alpha1);
-//							switchEffectLabel.setText(getString(R.string.alpha1));
-//			            	break;
-//			            case 1:
-//			            	mDraw.alpha2();
-//							switchEffect.setBackgroundResource(R.drawable.alpha2);
-//							switchEffectLabel.setText(getString(R.string.alpha2));
-//			            	break;
-//			            case 2:
-//			            	mDraw.alpha3();
-//							switchEffect.setBackgroundResource(R.drawable.alpha3);
-//							switchEffectLabel.setText(getString(R.string.alpha3));
-//			            	break;
-//			            case 3:
-//			            	mDraw.alpha4();
-//							switchEffect.setBackgroundResource(R.drawable.alpha2);
-//							switchEffectLabel.setText(getString(R.string.alpha2));
-//			            	break;
-//			            case 4:
-//			            	mDraw.alpha5();
-//							switchEffect.setBackgroundResource(R.drawable.alpha3);
-//							switchEffectLabel.setText(getString(R.string.alpha3));
-//			            	break;
-//			            case 5:
-//			            	mDraw.grayScale();
-//							switchEffect.setBackgroundResource(R.drawable.grayscale);
-//							switchEffectLabel.setText(getString(R.string.gray_scale));
-//			            	break;
-//			            case 6:
-//			            	mDraw.highContrast();
-//							switchEffect.setBackgroundResource(R.drawable.highcontrast);
-//							switchEffectLabel.setText(getString(R.string.high_contrast));
-//			            	break;
-//			            case 7:
-//			            	mDraw.contrastBW();
-//							switchEffect.setBackgroundResource(R.drawable.highcontrastbw);
-//							switchEffectLabel.setText(getString(R.string.contrast_bw));
-//			            	break;
-//			            case 8:
-//			            	mDraw.hue1();
-//							switchEffect.setBackgroundResource(R.drawable.hue1);
-//							switchEffectLabel.setText(getString(R.string.hue1));
-//			                break;
-//			            case 9:
-//			            	mDraw.hue2();
-//							switchEffect.setBackgroundResource(R.drawable.hue2);
-//							switchEffectLabel.setText(getString(R.string.hue2));
-//			                break;
-//			            case 10:
-//			            	mDraw.edgeDetect();
-//							switchEffect.setBackgroundResource(R.drawable.edgedetect);
-//							switchEffectLabel.setText(getString(R.string.edgedetect));
-//			                break;
-//			            case 11:
-//			            	mDraw.edgeDetectTransparent();
-//							switchEffect.setBackgroundResource(R.drawable.edgedetect);
-//							switchEffectLabel.setText(getString(R.string.edgedetect));
-//			                break;
-//			            case 12:
-//			            	mDraw.resetEffect();
-//							switchEffect.setBackgroundResource(R.drawable.icon64);
-//							switchEffectLabel.setText(getString(R.string.original));
-//			                break;
-//						default:
-//							break;
-//						}
-//		            	loadingSE.setVisibility(View.INVISIBLE);
-//		            	switchEffect.setVisibility(View.VISIBLE);
-//					}
-//				}, 10);
-//			}
-//		});
 		final Button invert = (Button) findViewById(R.id.invert);
 		invert.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -492,6 +423,8 @@ public class CameraOverlayActivity extends Activity {
 				}
 			}
 		});
+		
+
 	}
 	
 	public String getRealPathFromURI(Uri contentUri) {
@@ -509,13 +442,14 @@ public class CameraOverlayActivity extends Activity {
 
 		if (resultCode == RESULT_OK) {
 			Uri selectedImage = imageReturnedIntent.getData();
-			basefile = preview.file;getRealPathFromURI(selectedImage);
+			basefile = preview.file;
+			getRealPathFromURI(selectedImage);
 			loadBaseImage(selectedImage);
 		}
 		try {
 			preview.startCamera();
 		} catch (Exception e) {
-			mensagemTemporaria("Ops!" + e.getMessage());
+			toast("Ops!" + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -527,12 +461,12 @@ public class CameraOverlayActivity extends Activity {
 			photoBase.setBitmap(bmp);
 			photoBase.selectedPicture();
 		} catch (Exception e) {
-			mensagemTemporaria("Ops!" + e.getMessage());
+			toast("Ops!" + e.getMessage());
 			e.printStackTrace();
 		}
 	}
 
-	public void mensagemTemporaria(String dados) {
+	public void toast(String dados) {
 		final Toast t = Toast.makeText(this, dados, Toast.LENGTH_LONG);
 		t.setGravity(Gravity.CENTER, 0, 0);
 		t.show();
@@ -550,5 +484,10 @@ public class CameraOverlayActivity extends Activity {
 			else
 				effects.setVisibility(View.GONE);
 		}
+	}
+
+	private String getSdcardCameraOverlay() {
+		return PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("camera_overlay_directory", "/sdcard/CameraOverlay/");
+		 
 	}
 }

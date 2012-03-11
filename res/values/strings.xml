@@ -34,4 +34,16 @@
     <string name="original">Original</string>
     <string name="alpha">Transparency</string>
     <string name="takelayeredpic">Take Pic with the actual layer</string>
+    <string name="preferences">Preferences</string>
+    <string name="mix_effects_summary">Allow mix effects overlaying the image</string>
+    <string name="mix_effects_title">Mix Effects</string>
+    <string name="savingLayeredPicAs">Pic was saved with the current effect</string>
+    <string name="error_get_camera_preview">Error trying to get camera preview</string>
+    <string name="retry">Retry</string>
+    <string name="cancel">Cancel</string>
+    <string name="set_new_directory_to_camera_overlay">Set the default directory to Camera Overlay, perhaps you dont have a sdcard</string>
+    <string name="title_camera_overlay_directory">Camera Overlay Directory</string>
+    <string name="pref_where_save">Where save the pics</string>
+    <string name="help_about_camera_overlay_directory">It\'s the directory was we save all pictures when you took the photo base first instead of use your album.</string>
+    <string name="default_settings">Default settings</string>
 </resources>

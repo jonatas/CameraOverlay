@@ -1,13 +1,28 @@
 package me.ideia.cameraoverlay;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.Bitmap.Config;
+import android.graphics.Paint.Style;
+import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.ShutterCallback;
@@ -57,8 +72,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 
 	};
 
-	public String file = "/sdcard/CameraOverlay/test-1.jpg";
-	
+	public String file = "/sdcard/CameraOverlay/image-1.jpg";
 	PictureCallback jpeg = new PictureCallback() {
 
 		@Override
@@ -71,15 +85,15 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 				outStream.close();
 			} catch (Exception e) {
 				Log.d("Camera", e.getMessage());
-				((CameraOverlayActivity)getContext()).mensagemTemporaria("Exception! " + e.getMessage());
+				((CameraOverlayActivity)getContext()).toast("Exception! " + e.getMessage());
 			}
 
 			File f = new File(file);
 			try {
 			    if (f.exists()) {
-			    	((CameraOverlayActivity)getContext()).mensagemTemporaria(getContext().getString(R.string.successsaved));
+			    	((CameraOverlayActivity)getContext()).toast(getContext().getString(R.string.successsaved));
 			    } else {
-			    	((CameraOverlayActivity)getContext()).mensagemTemporaria(getContext().getString(R.string.dontsaved));
+			    	((CameraOverlayActivity)getContext()).toast(getContext().getString(R.string.dontsaved));
 			    }
 			} catch (Exception e) {
 			}
@@ -153,12 +167,41 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 			try {
 				mCamera.setPreviewDisplay(mHolder);
 			} catch (IOException e) {
-				e.printStackTrace();
+				Builder cameraPreviewError = new AlertDialog.Builder(getContext());
+				cameraPreviewError.setMessage(R.string.error_get_camera_preview); 
+				cameraPreviewError.setIcon(R.drawable.error);
+				cameraPreviewError.setCancelable(true);
+				cameraPreviewError.setOnCancelListener(new DialogInterface.OnCancelListener() {
+					@Override
+					public void onCancel(DialogInterface dialog) {
+						System.exit(0);
+						
+					}
+				});
+				cameraPreviewError.setItems(R.string.retry, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						
+						try {
+							mCamera.setPreviewDisplay(mHolder);
+						} catch (IOException e) {
+							e.printStackTrace();
+							System.exit(0);
+						}
+					}
+				});
+				
 			}
 		}
 		Camera.Parameters parameters = mCamera.getParameters();
 		parameters.setPreviewSize(w, h);
-		mCamera.setParameters(parameters);
+		try {
+			
+			mCamera.setParameters(parameters);
+		} catch (Exception e) {
+			// strange stuff happnens on a unknown model. 
+			// fixing the first reported error by @googleplay
+		}
 		mCamera.startPreview();
 		new Handler().post(new Thread() {
 			@Override
