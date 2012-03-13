@@ -27,7 +27,7 @@
     <string name="alpha5">White Alpha</string>
     <string name="contrast_bw">Contrast black/white</string>
     <string name="edgedetect">Edge Detect</string>
-    <string name="edgedetecttransparent">Alpha Edge Detector</string>
+    <string name="edgedetecttransparent">Transparent with Edge</string>
     <string name="grid">Grid</string>
     <string name="vertical">Vertical</string>
     <string name="horizontal">Horizontal</string>

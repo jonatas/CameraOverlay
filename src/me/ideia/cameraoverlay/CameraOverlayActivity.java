@@ -17,9 +17,11 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.SweepGradient;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -59,6 +61,7 @@ public class CameraOverlayActivity extends Activity {
 	LayoutInflater controlInflater = null;
 	PhotoEffects photoBase;
 	View effects;
+	View viewControl;
 	
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
     static String basefile;
@@ -223,7 +226,7 @@ public class CameraOverlayActivity extends Activity {
 		photoBase = new PhotoEffects(this);
 
 		controlInflater = LayoutInflater.from(getBaseContext());
-		View viewControl = controlInflater.inflate(R.layout.main, null);
+		viewControl = controlInflater.inflate(R.layout.main, null);
 		LayoutParams layoutParamsControl = new LayoutParams(
 				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		this.addContentView(photoBase, layoutParamsControl);
@@ -252,37 +255,47 @@ public class CameraOverlayActivity extends Activity {
 				toast(getString(R.string.savingAs) + preview.file);
 			}
 		});
-		takePicture.setOnLongClickListener(new View.OnLongClickListener() {
+		final Button takeNewPicture = (Button) findViewById(R.id.takenewpicture);
+		takeNewPicture.setOnLongClickListener(new View.OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View v) {
                 View mainView = v.getRootView();				
                 HashMap<View, Integer> buttonStateSnapshot = new HashMap<View, Integer>();
-				
-                for (View icon : mainView.getTouchables()) {
-                	buttonStateSnapshot.put(icon, takePicture.getVisibility());
-                	icon.setVisibility(View.GONE);
-				}
-            	
+                buttonStateSnapshot.put(effects, effects.getVisibility());
+                buttonStateSnapshot.put(viewControl, viewControl.getVisibility());
+				effects.setVisibility(View.INVISIBLE);
+				viewControl.setVisibility(View.INVISIBLE);
+
+				preview.setDrawingCacheEnabled(true);
+                preview.buildDrawingCache();
                 mainView.setDrawingCacheEnabled(true);
-                Bitmap bitmap = mainView.getDrawingCache();
+                Bitmap bitmap = Bitmap.createBitmap(preview.getDrawingCache());
                 Canvas canvas = new Canvas(bitmap);
-                Bitmap shot = preview.getDrawingCache();
-                String filename = picFileName(".jpg");;
-				if (shot == null){
-                	preview.takePicture(filename);
-			     	try {
-						shot = getBitmapFromString(filename);
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+                //canvas.drawBitmap(mainView.getDrawingCache(), 0, 0, new Paint());
+                //canvas.drawBitmap(preview.getDrawingCache(), 0, 0, new Paint());
+                //Bitmap shot = preview.getDrawingCache();
+//                String filename = picFileName(".jpg");
+//				if (shot == null){
+//                	preview.takePicture(filename);
+//			     	try {
+//						shot = getBitmapFromString(filename);
+//					} catch (FileNotFoundException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//				} else {
+//					toast("preview not null, using screen");
+//				}
+				if (bitmap == null) {
+					toast("bitmap null");
 				}
-				if (shot != null)
-			    	canvas.drawBitmap(shot, 0, 0, photoBase.getPaint());
-				
-                for (View icon : mainView.getTouchables()) {
-                	icon.setVisibility(buttonStateSnapshot.get(icon));
-				}
+//				if (shot != null) {
+//			    	canvas.drawBitmap(shot, 0, 0, photoBase.getPaint());
+//				} else {
+//					toast("shot null");
+//				}
+				effects.setVisibility(buttonStateSnapshot.get(effects));
+				viewControl.setVisibility(buttonStateSnapshot.get(viewControl));
 	            
 	            try {
 	            	FileOutputStream fos = newPicFile(".png");
@@ -299,7 +312,6 @@ public class CameraOverlayActivity extends Activity {
 			}
 		});
 		
-		final Button takeNewPicture = (Button) findViewById(R.id.takenewpicture);
 		takeNewPicture.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -309,7 +321,7 @@ public class CameraOverlayActivity extends Activity {
 					basefile = preview.file;
 					
 					try {
-						loadBaseImage(getBitmapFromString(preview.file));
+						loadBaseImage(getBitmapFromString(basefile));
 					} catch (FileNotFoundException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

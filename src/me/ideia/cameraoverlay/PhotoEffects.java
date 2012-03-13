@@ -17,6 +17,43 @@ import android.view.View;
 
 public class PhotoEffects extends View {
 
+	private static final float[] NEGATIVE = {
+		-1,  0,  0, 0, 255,
+		0, -1,  0, 0, 255,
+		0,  0, -1, 0, 255, 
+		0,  0,  0, 1, 0 };
+	
+	private static float[] HIGH_CONSTRAST = {
+		2,  0,  0, 0, 0,
+		0, 2,  0, 0, 0,
+		0,  0, 2, 0, 0, 
+		0,  0,  0, 1, 0 };
+	private static double[][] EDGE_DETECT = {	
+		{2,3,-3},
+		{1,-1,1},
+		{-2,1,-2}};
+	private static float[] CONTRAST_BW={
+		1,  1,  1, 0, 0,
+		1, 1,  1, 0, 0,
+		1,  1, 1, 0, 0, 
+		0,  0,  0, 1, 0 };
+	static private float[] GRAY_SCALE={
+		0.3f, 0.3f, 0.3f, 0, 0,
+		0.3f, 0.3f, 0.3f, 0, 0,
+		0.3f, 0.3f, 0.3f, 0, 0, 
+		0,  0,  0, 1, 0 };
+	private static float[] HUE1={
+		0, 1, 0, 0, 0,
+		0, 0, 1, 0, 0,
+		1, 0, 0, 0, 0, 
+		0, 0, 0, 1, 0};
+	private static float[] HUE2 ={
+		0,  0,  1, 0, 0,
+		1,  0,  0, 0, 0,
+		0,  1,  0, 0, 0, 
+		0,  0,  0, 1, 0 };
+
+
 	private Bitmap bmp = null;
 	private Bitmap bmpOriginal = null;
 	private int alpha = 128;
@@ -28,7 +65,6 @@ public class PhotoEffects extends View {
 	private boolean inverted = false;
 	private boolean pictureNotSelected = true;
 	private SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-	
 	public void selectedPicture() {
 		pictureNotSelected = false;
 	}
@@ -159,69 +195,30 @@ public class PhotoEffects extends View {
 
 	public Bitmap convertToNegative(Bitmap sampleBitmap){
 		inverted = !inverted;
-		ColorMatrix negativeMatrix =new ColorMatrix();
-
-		float[] negMat={-1,  0,  0, 0, 255,
-				0, -1,  0, 0, 255,
-				0,  0, -1, 0, 255, 
-				0,  0,  0, 1, 0 };
-
-		return applyMatrix(sampleBitmap, negativeMatrix, negMat);
+		return applyMatrix(sampleBitmap, new ColorMatrix(), PhotoEffects.NEGATIVE);
 	}
 
 	public Bitmap highContrast(Bitmap sampleBitmap){
 		ColorMatrix matrix =new ColorMatrix();
 
-		float[] mat={2,  0,  0, 0, 0,
-				0, 2,  0, 0, 0,
-				0,  0, 2, 0, 0, 
-				0,  0,  0, 1, 0 };
 
-		return applyMatrix(sampleBitmap, matrix, mat);
+		return applyMatrix(sampleBitmap, matrix, HIGH_CONSTRAST);
 	}
 
 	public Bitmap contrastBW(Bitmap sampleBitmap){
-		ColorMatrix matrix =new ColorMatrix();
-
-		float[] mat={1,  1,  1, 0, 0,
-				1, 1,  1, 0, 0,
-				1,  1, 1, 0, 0, 
-				0,  0,  0, 1, 0 };
-
-		return applyMatrix(sampleBitmap, matrix, mat);
+		return applyMatrix(sampleBitmap, new ColorMatrix(), CONTRAST_BW);
 	}
 
 	public Bitmap grayScale(Bitmap sampleBitmap){
-		ColorMatrix matrix =new ColorMatrix();
-
-		float[] mat={0.3f, 0.3f, 0.3f, 0, 0,
-				0.3f, 0.3f, 0.3f, 0, 0,
-				0.3f, 0.3f, 0.3f, 0, 0, 
-				0,  0,  0, 1, 0 };
-
-		return applyMatrix(sampleBitmap, matrix, mat);
+		return applyMatrix(sampleBitmap, new ColorMatrix(),	GRAY_SCALE);
 	}
 
 	public Bitmap hue1(Bitmap sampleBitmap){
-		ColorMatrix matrix =new ColorMatrix();
-
-		float[] mat={0,  1,  0, 0, 0,
-				0, 0,  1, 0, 0,
-				1,  0, 0, 0, 0, 
-				0,  0,  0, 1, 0 };
-
-		return applyMatrix(sampleBitmap, matrix, mat);
+		return applyMatrix(sampleBitmap, new ColorMatrix(), HUE1);
 	}
 
 	public Bitmap hue2(Bitmap sampleBitmap){
-		ColorMatrix matrix =new ColorMatrix();
-
-		float[] mat={0,  0,  1, 0, 0,
-				1,  0,  0, 0, 0,
-				0,  1,  0, 0, 0, 
-				0,  0,  0, 1, 0 };
-
-		return applyMatrix(sampleBitmap, matrix, mat);
+		return applyMatrix(sampleBitmap, new ColorMatrix(), HUE2);
 	}
 
 	public Bitmap alpha1(Bitmap source){
@@ -264,24 +261,18 @@ public class PhotoEffects extends View {
 	}
 
 	public Bitmap alpha4(Bitmap source){
-		Bitmap result = Bitmap.createBitmap( source.getWidth(), source.getHeight(), Config.ARGB_8888 );
-		for( int x = 0; x < source.getWidth(); x++ ) {
-			for( int y = 0; y < source.getHeight(); y++ ) {
-				int argb = source.getPixel(x, y);
-				int c = Color.argb((Color.blue(argb) + Color.red(argb) + Color.green(argb)) / 3, 255, 255, 255);
-				result.setPixel( x, y, c );
-			}
-		}
-
-		return result;
+		return alpha(source, 255,255,255);
 	}
 
 	public Bitmap alpha5(Bitmap source){
+		return alpha(source, 0, 0, 0);
+	}
+	public Bitmap alpha(Bitmap source, int r, int g, int b){
 		Bitmap result = Bitmap.createBitmap( source.getWidth(), source.getHeight(), Config.ARGB_8888 );
 		for( int x = 0; x < source.getWidth(); x++ ) {
 			for( int y = 0; y < source.getHeight(); y++ ) {
 				int argb = source.getPixel(x, y);
-				int c = Color.argb(255 - (Color.blue(argb) + Color.red(argb) + Color.green(argb)) / 3, 0, 0, 0);
+				int c = Color.argb(255 - (Color.blue(argb) + Color.red(argb) + Color.green(argb)) / 3, r, g, b);
 				result.setPixel( x, y, c );
 			}
 		}
@@ -303,9 +294,7 @@ public class PhotoEffects extends View {
 
 	public void edgeDetect() {
 		ConvolutionMatrix cm = new ConvolutionMatrix();
-		cm.applyConfig(new double[][]{	{2,3,-3},
-				{1,-1,1},
-				{-2,1,-2}});
+		cm.applyConfig(EDGE_DETECT);
 		bmp = cm.computeConvolution3x3(currentImage());
 		invalidate();
 	}

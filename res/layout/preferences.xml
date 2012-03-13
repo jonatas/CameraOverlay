@@ -28,5 +28,4 @@
             android:defaultValue="/sdcard/CameraOverlay/" />
 
     </PreferenceCategory>
-    
 </PreferenceScreen>
