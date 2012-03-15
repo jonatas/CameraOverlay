@@ -55,9 +55,9 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 			super.onWindowVisibilityChanged(visibility);
 		} catch (Exception e) {
 		}
-		
+
 	};
-	
+
 	ShutterCallback shutter = new ShutterCallback() {
 
 		@Override
@@ -84,18 +84,25 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 				outStream.flush();
 				outStream.close();
 			} catch (Exception e) {
-		//		Log.d("Camera", e.getMessage());
-				((CameraOverlayActivity)getContext()).toast("Exception! " + e.getMessage());
+				// Log.d("Camera", e.getMessage());
+				((CameraOverlayActivity) getContext()).toast("Exception! "
+						+ e.getMessage());
 			}
 
 			File f = new File(file);
 			try {
-			    if (f.exists()) {
-			    	((CameraOverlayActivity)getContext()).toast(getContext().getString(R.string.successsaved));
-			    } else {
-			    	((CameraOverlayActivity)getContext()).toast(getContext().getString(R.string.dontsaved));
-			    }
+				if (f.exists()) {
+					((CameraOverlayActivity) getContext()).toast(getContext()
+							.getString(R.string.successsaved));
+					if (((CameraOverlayActivity)getContext()).photoBase.withoutPicture()) {
+						((CameraOverlayActivity)getContext()).takeNewPicture();
+					}
+				} else {
+					((CameraOverlayActivity) getContext()).toast(getContext()
+							.getString(R.string.dontsaved));
+				}
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 
@@ -105,7 +112,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 		if (basefile != null) {
 			file = basefile;
 		}
-		
+
 		Pattern pattern = Pattern.compile("(.*)-([0-9]+)(\\..{3,4})$");
 		Matcher matcher = pattern.matcher(basefile);
 		try {
@@ -119,7 +126,8 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 					} catch (Exception e) {
 					}
 					do {
-						auxFile = matcher.group(1) + "-" + (++auxOrder) + matcher.group(3);
+						auxFile = matcher.group(1) + "-" + (++auxOrder)
+								+ matcher.group(3);
 						f = new File(auxFile);
 					} while (f.exists());
 					file = auxFile;
@@ -132,10 +140,13 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 				if (matcher.matches()) {
 					if (matcher.groupCount() == 2) {
 						int auxOrder = 0;
-						do {
-							auxFile = matcher.group(1) + "-" + (++auxOrder) + matcher.group(3);
+						auxFile = file;
+						f = new File(auxFile);
+						while (f.exists()) {
+							auxFile = matcher.group(1) + "-" + (++auxOrder)
+									+ matcher.group(2);
 							f = new File(auxFile);
-						} while (f.exists());
+						}
 						file = auxFile;
 					} else {
 						throw new Exception();
@@ -143,81 +154,51 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 				}
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			file = CameraOverlayActivity.basefile;
 			File f = new File(file);
 			int auxOrder = 0;
-			if (!f.exists()) {
-				do {
-					file = "/sdcard/CameraOverlay/image-" + (++auxOrder) + ".jpg";
-					f = new File(file);
-				} while (f.exists());
+			while (f.exists()) {
+				file = "/sdcard/CameraOverlay/image-" + (++auxOrder) + ".jpg";
+				f = new File(file);
 			}
 		}
 		mCamera.takePicture(shutter, raw, jpeg);
 		try {
-			getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
-                    Uri.parse("file://" + Environment.getExternalStorageDirectory()))); 
+			getContext().sendBroadcast(
+					new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"
+							+ Environment.getExternalStorageDirectory())));
 		} catch (Exception e) {
 		}
 	}
 
 	public void startCamera() {
 		if (mCamera == null) {
-			mCamera = Camera.open();
 			try {
+				mCamera = Camera.open();
 				mCamera.setPreviewDisplay(mHolder);
 			} catch (IOException e) {
-				Builder cameraPreviewError = new AlertDialog.Builder(getContext());
-				cameraPreviewError.setMessage(R.string.error_get_camera_preview); 
-				cameraPreviewError.setIcon(R.drawable.error);
-				cameraPreviewError.setCancelable(true);
-				cameraPreviewError.setOnCancelListener(new DialogInterface.OnCancelListener() {
-					@Override
-					public void onCancel(DialogInterface dialog) {
-						System.exit(0);
-						
-					}
-				});
-				cameraPreviewError.setItems(R.string.retry, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						
-						try {
-							mCamera.setPreviewDisplay(mHolder);
-						} catch (IOException e) {
-							e.printStackTrace();
-							System.exit(0);
-						}
-					}
-				});
-				
+				e.printStackTrace();
 			}
 		}
 		Camera.Parameters parameters = mCamera.getParameters();
 		parameters.setPreviewSize(w, h);
 		try {
-			
+
 			mCamera.setParameters(parameters);
 		} catch (Exception e) {
-			// strange stuff happnens on a unknown model. 
+			// strange stuff happnens on a unknown model.
 			// fixing the first reported error by @googleplay
 		}
 		mCamera.startPreview();
-		new Handler().post(new Thread() {
-			@Override
-			public void run() {
-				final Button takePicture = (Button) findViewById(R.id.takepicture);
-				if (takePicture != null) {
-					takePicture.setVisibility(View.VISIBLE);
-					Button takeNewPicture = (Button) findViewById(R.id.takenewpicture);
-					takeNewPicture.setVisibility(View.GONE);
-				}
-			}
-		});
 	}
-	
+
 	public void stopCamera() {
-		mCamera.stopPreview();
+		try {
+			mCamera.stopPreview();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		mCamera.release();
 		mCamera = null;
 		new Handler().post(new Thread() {
@@ -232,7 +213,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 			}
 		});
 	}
-	
+
 	public void surfaceCreated(SurfaceHolder holder) {
 		// The Surface has been created, acquire the camera and tell it where
 		// to draw.

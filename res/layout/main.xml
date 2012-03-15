@@ -88,25 +88,73 @@ android:text="@string/takepicture"
 android:background="@drawable/picture"
 android:layout_gravity="right"
 />
+<LinearLayout android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:visibility="gone"
+      android:layout_gravity="right" 
+      android:id="@+id/takenewpicturewrapper"
+      android:gravity="center">
 <Button
 android:id="@+id/takenewpicture"
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
-android:text="@string/takenewpicture"
-android:visibility="gone"
 android:background="@drawable/newpicture"
 android:layout_gravity="right"
 />
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/takenewpicture"
+    android:layout_gravity="center"
+    android:textAppearance="?android:attr/textAppearanceSmall"
+    android:textSize="12dp" />
+</LinearLayout>
+<LinearLayout android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:layout_gravity="right" 
+android:visibility="gone"
+      android:id="@+id/screenshotwrapper"
+      android:gravity="center"
+      android:layout_marginTop="10dp">
+<Button
+android:id="@+id/takescreenshot"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:background="@drawable/screenshot"
+android:layout_gravity="right"
+/>
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/screenshot"
+    android:layout_gravity="center"
+    android:textAppearance="?android:attr/textAppearanceSmall"
+    android:textSize="12dp" />
+</LinearLayout>
+<LinearLayout android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:layout_gravity="right" 
+      android:gravity="center"
+      android:id="@+id/loadimagewrapper"
+android:layout_marginTop="10dp"
+android:layout_marginBottom="10dp">
 <Button
 android:id="@+id/loadimage"
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
-android:text="@string/loadfile"
-android:layout_marginTop="10dp"
-android:layout_marginBottom="10dp"
 android:background="@drawable/open"
-android:layout_gravity="right"
 />
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/loadfile"
+    android:layout_gravity="center"
+    android:textAppearance="?android:attr/textAppearanceSmall"
+    android:textSize="12dp" />
+</LinearLayout>
 <SeekBar
     android:id="@+id/alphaValue"
     android:layout_width="fill_parent"

@@ -92,12 +92,12 @@ public class PhotoEffects extends View {
 		Bitmap resized;
 		if (bitmap.getHeight() > bitmap.getWidth()) {
 			float curScaleX;
-			float curScaleY;
+			//float curScaleY;
 			curScaleX = width / bitmap.getHeight();
-			curScaleY = height / bitmap.getWidth();
+			//curScaleY = height / bitmap.getWidth();
 
 			Matrix matrix = new Matrix();
-			matrix.postScale(curScaleX, curScaleY);
+			matrix.postScale(curScaleX, curScaleX);
 			matrix.postRotate(-90);
 
 			resized = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
@@ -117,7 +117,8 @@ public class PhotoEffects extends View {
 			setBitmap(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.image));
 			pictureNotSelected  = true;
 		} else {
-		    canvas.drawBitmap(bmp, 0, 0, getPaint());
+			int top = -(bmp.getHeight() - height) / 2;
+		    canvas.drawBitmap(bmp, 0, top, getPaint());
 			super.onDraw(canvas);
 		}
 	}

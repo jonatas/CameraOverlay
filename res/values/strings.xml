@@ -45,4 +45,5 @@
     <string name="pref_where_save">Where save the pics</string>
     <string name="help_about_camera_overlay_directory">It\'s the directory was we save all pictures when you took the photo base first instead of use your album.</string>
     <string name="default_settings">Settings</string>
+    <string name="screenshot">Screenshot</string>
 </resources>

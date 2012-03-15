@@ -37,6 +37,7 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -238,7 +239,8 @@ public class CameraOverlayActivity extends Activity {
 		LayoutParams layoutParamsEffects = new LayoutParams(
 				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		this.addContentView(effects, layoutParamsEffects);
-		
+
+		final Button takeScreenshot = (Button) findViewById(R.id.takescreenshot);
 
 		final Button takePicture = (Button) findViewById(R.id.takepicture);
 		takePicture.setOnClickListener(new View.OnClickListener() {
@@ -249,53 +251,29 @@ public class CameraOverlayActivity extends Activity {
 					basefile = picFileName(".jpg");
 				}
 				preview.takePicture(basefile);
-				takePicture.setVisibility(View.GONE);
-				Button takeNewPicture = (Button) findViewById(R.id.takenewpicture);
-				takeNewPicture.setVisibility(View.VISIBLE);
+				showTakeNewPicture(false);
 				toast(getString(R.string.savingAs) + preview.file);
 			}
 		});
-		final Button takeNewPicture = (Button) findViewById(R.id.takenewpicture);
-		takeNewPicture.setOnLongClickListener(new View.OnLongClickListener() {
+		takeScreenshot.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public boolean onLongClick(View v) {
-                View mainView = v.getRootView();				
-                HashMap<View, Integer> buttonStateSnapshot = new HashMap<View, Integer>();
-                buttonStateSnapshot.put(effects, effects.getVisibility());
-                buttonStateSnapshot.put(viewControl, viewControl.getVisibility());
-				effects.setVisibility(View.INVISIBLE);
-				viewControl.setVisibility(View.INVISIBLE);
+			public void onClick(View v) {
+                Toast waiting = getToast("Aguarde...", Toast.LENGTH_SHORT);
+                while (! new File(preview.file).exists()) {
+                	waiting.show();
+                }
+                //preview.stopCamera();
+                
+				Bitmap b = BitmapFactory.decodeFile(preview.file);
+				b = photoBase.resizeBitmap(b);
 
-				preview.setDrawingCacheEnabled(true);
-                preview.buildDrawingCache();
-                mainView.setDrawingCacheEnabled(true);
-                Bitmap bitmap = Bitmap.createBitmap(preview.getDrawingCache());
+			    Bitmap bitmap = Bitmap.createBitmap(b);
                 Canvas canvas = new Canvas(bitmap);
-                //canvas.drawBitmap(mainView.getDrawingCache(), 0, 0, new Paint());
-                //canvas.drawBitmap(preview.getDrawingCache(), 0, 0, new Paint());
-                //Bitmap shot = preview.getDrawingCache();
-//                String filename = picFileName(".jpg");
-//				if (shot == null){
-//                	preview.takePicture(filename);
-//			     	try {
-//						shot = getBitmapFromString(filename);
-//					} catch (FileNotFoundException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				} else {
-//					toast("preview not null, using screen");
-//				}
+                canvas.drawBitmap(photoBase.getBmp(), 0, 0, photoBase.getPaint());
+			
 				if (bitmap == null) {
 					toast("bitmap null");
 				}
-//				if (shot != null) {
-//			    	canvas.drawBitmap(shot, 0, 0, photoBase.getPaint());
-//				} else {
-//					toast("shot null");
-//				}
-				effects.setVisibility(buttonStateSnapshot.get(effects));
-				viewControl.setVisibility(buttonStateSnapshot.get(viewControl));
 	            
 	            try {
 	            	FileOutputStream fos = newPicFile(".png");
@@ -308,32 +286,14 @@ public class CameraOverlayActivity extends Activity {
 	            }
 
 				toast(getString(R.string.savingLayeredPicAs) + preview.file);
-				return false;
 			}
 		});
-		
+		final Button takeNewPicture = (Button) findViewById(R.id.takenewpicture);
 		takeNewPicture.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
-				if (photoBase.withoutPicture()) {
-					
-					basefile = preview.file;
-					
-					try {
-						loadBaseImage(getBitmapFromString(basefile));
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				takePicture.setVisibility(View.VISIBLE);
-				takeNewPicture.setVisibility(View.GONE);
-				try {
-					preview.stopCamera();
-				} catch (Exception e) {
-				}
-				preview.startCamera();
+				takeNewPicture();
 			}
 		});
 		
@@ -350,9 +310,7 @@ public class CameraOverlayActivity extends Activity {
 				} catch (Exception e) {
 					toast(getString(R.string.waitloadimages));
 				}
-
-				takePicture.setVisibility(View.VISIBLE);
-				takeNewPicture.setVisibility(View.GONE);
+				showTakeNewPicture(true);
 			}
 		});
 
@@ -462,6 +420,34 @@ public class CameraOverlayActivity extends Activity {
 		
 
 	}
+
+	public void takeNewPicture() {
+		if (photoBase.withoutPicture()) {
+			basefile = preview.file;
+			try {
+				loadBaseImage(getBitmapFromString(basefile));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+		showTakeNewPicture(true);
+		try {
+			preview.stopCamera();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		preview.startCamera();
+	}
+
+	public void showTakeNewPicture(boolean open) {
+		final Button takePicture = (Button) findViewById(R.id.takepicture);
+		final LinearLayout takeNewPictureWrapper = (LinearLayout) findViewById(R.id.takenewpicturewrapper);
+		final LinearLayout takeScreenshotWrapper = (LinearLayout ) findViewById(R.id.screenshotwrapper);
+		
+		takePicture.setVisibility(open ? View.VISIBLE : View.GONE);
+		takeNewPictureWrapper.setVisibility(open ? View.GONE : View.VISIBLE);
+		takeScreenshotWrapper.setVisibility(open ? View.GONE : View.VISIBLE);
+	}
 	
 	public String getRealPathFromURI(Uri contentUri) {
         String[] proj = { MediaStore.Images.Media.DATA };
@@ -497,7 +483,6 @@ public class CameraOverlayActivity extends Activity {
 
 	private void loadBaseImage(Bitmap bmp ) {
 		try {
-			
 			photoBase.setBitmap(bmp);
 			photoBase.selectedPicture();
 		} catch (Exception e) {
@@ -517,9 +502,13 @@ public class CameraOverlayActivity extends Activity {
 		Bitmap bmp = BitmapFactory.decodeStream(imageStream);
 		return bmp;
 	}
+		
+	public Toast getToast(String dados, int duration) {
+		return Toast.makeText(this, dados, duration);
+	}
 
 	public void toast(String dados) {
-		final Toast t = Toast.makeText(this, dados, Toast.LENGTH_LONG);
+		final Toast t = getToast(dados, Toast.LENGTH_LONG);
 		t.setGravity(Gravity.CENTER, 0, 0);
 		t.show();
 	}
@@ -540,6 +529,5 @@ public class CameraOverlayActivity extends Activity {
 
 	private String getSdcardCameraOverlay() {
 		return PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("camera_overlay_directory", "/sdcard/CameraOverlay/");
-		 
 	}
 }
