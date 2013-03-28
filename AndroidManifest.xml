@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="me.ideia.cameraoverlay" android:versionCode="4"
-	android:versionName="1.2">
-	<uses-sdk android:minSdkVersion="7" />
+	package="me.ideia.cameraoverlay" android:versionCode="5"
+	android:versionName="1.3">
+	<uses-sdk android:minSdkVersion="11" android:targetSdkVersion="17" />
 	<uses-permission android:name="android.permission.CAMERA" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -31,5 +31,9 @@
 			android:label="@string/preferences" android:theme="@android:style/Theme.NoTitleBar"
                  android:screenOrientation="landscape">
 		</activity>
+        <activity
+            android:name="com.kaloer.filepicker.FilePickerActivity"
+            android:label="@string/choose_the_file" >
+        </activity>
 	</application>
 </manifest>

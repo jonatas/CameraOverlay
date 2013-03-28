@@ -1,31 +1,18 @@
 package me.ideia.cameraoverlay;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Bitmap.CompressFormat;
-import android.graphics.Bitmap.Config;
-import android.graphics.Paint.Style;
-import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.ShutterCallback;
+import android.hardware.Camera.Size;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
@@ -34,6 +21,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 	private SurfaceHolder mHolder;
@@ -85,21 +73,18 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 				outStream.close();
 			} catch (Exception e) {
 				// Log.d("Camera", e.getMessage());
-				((CameraOverlayActivity) getContext()).toast("Exception! "
-						+ e.getMessage());
+				((CameraOverlayActivity)getContext()).toast("Exception! " + e.getMessage());
 			}
 
 			File f = new File(file);
 			try {
 				if (f.exists()) {
-					((CameraOverlayActivity) getContext()).toast(getContext()
-							.getString(R.string.successsaved));
+					((CameraOverlayActivity)getContext()).toast(getContext().getString(R.string.successsaved));
 					if (((CameraOverlayActivity)getContext()).photoBase.withoutPicture()) {
 						((CameraOverlayActivity)getContext()).takeNewPicture();
 					}
 				} else {
-					((CameraOverlayActivity) getContext()).toast(getContext()
-							.getString(R.string.dontsaved));
+					((CameraOverlayActivity)getContext()).toast(getContext().getString(R.string.dontsaved));
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -126,8 +111,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 					} catch (Exception e) {
 					}
 					do {
-						auxFile = matcher.group(1) + "-" + (++auxOrder)
-								+ matcher.group(3);
+						auxFile = matcher.group(1) + "-" + (++auxOrder) + matcher.group(3);
 						f = new File(auxFile);
 					} while (f.exists());
 					file = auxFile;
@@ -143,8 +127,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 						auxFile = file;
 						f = new File(auxFile);
 						while (f.exists()) {
-							auxFile = matcher.group(1) + "-" + (++auxOrder)
-									+ matcher.group(2);
+							auxFile = matcher.group(1) + "-" + (++auxOrder) + matcher.group(2);
 							f = new File(auxFile);
 						}
 						file = auxFile;
@@ -165,9 +148,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 		}
 		mCamera.takePicture(shutter, raw, jpeg);
 		try {
-			getContext().sendBroadcast(
-					new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"
-							+ Environment.getExternalStorageDirectory())));
+			getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory())));
 		} catch (Exception e) {
 		}
 	}
@@ -178,36 +159,69 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 				mCamera = Camera.open();
 				mCamera.setPreviewDisplay(mHolder);
 			} catch (IOException e) {
+				Toast.makeText(getContext(), "Não foi possível carregar a câmera: " + e.getMessage(), Toast.LENGTH_LONG).show();
 				e.printStackTrace();
 			}
 		}
 		Camera.Parameters parameters = mCamera.getParameters();
-		parameters.setPreviewSize(w, h);
-		try {
+		List<Size> pictureSizes = parameters.getSupportedPictureSizes();
+		List<Size> previewSizes = parameters.getSupportedPreviewSizes();
+		Size maxPictureSize = pictureSizes.get(pictureSizes.size() - 1);
+		float screenRatio = (float)maxPictureSize.height / (float)maxPictureSize.width;
+		Size maxPreviewSize = previewSizes.get(0).height < previewSizes.get(previewSizes.size() - 1).height ? previewSizes.get(0) : previewSizes.get(previewSizes.size() - 1);
+		float difference = Math.abs(((float)maxPreviewSize.height / (float)maxPreviewSize.width) - screenRatio);
+		boolean found = false;
+		float adjust = 0;
+		do {
+			for (Size previewSize : previewSizes) {
+				float previewRatio = (float)previewSize.height / (float)previewSize.width;
+				float diff = Math.abs(previewRatio - screenRatio);
+				if (difference + adjust > diff && maxPreviewSize.height < previewSize.height) {
+					maxPreviewSize = previewSize;
+					difference = diff;
+					found = true;
+				}
+			}
+			adjust += 0.01;
+		} while (found == false);
+		parameters.setPreviewSize(maxPreviewSize.width, maxPreviewSize.height);
+		
+		float ratio = (float)maxPreviewSize.height / (float)maxPreviewSize.width;
 
-			mCamera.setParameters(parameters);
-		} catch (Exception e) {
+		int pictureHeight = (int)(maxPictureSize.width * ratio);
+		int pictureWidth = maxPictureSize.width;
+		if (pictureHeight > maxPictureSize.height) {
+			pictureHeight = maxPictureSize.height;
+			pictureWidth = (int)(maxPictureSize.height / ratio);
+		}
+		try {
+			try {
+				parameters.setPictureSize(pictureWidth, pictureHeight);
+				mCamera.setParameters(parameters);
+				mCamera.startPreview();
+			} catch (RuntimeException e) {
+				parameters.setPictureSize(maxPictureSize.width, maxPictureSize.height);
+				mCamera.setParameters(parameters);
+				mCamera.startPreview();
+			}
+		} catch (RuntimeException e) {
 			// strange stuff happnens on a unknown model.
 			// fixing the first reported error by @googleplay
+			Toast.makeText(getContext(), "Não foi possível carregar parâmetros e iniciar o preview da câmera.", Toast.LENGTH_LONG).show();
 		}
-		mCamera.startPreview();
 	}
 
 	public void stopCamera() {
-		try {
-			mCamera.stopPreview();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		mCamera.stopPreview();
 		mCamera.release();
 		mCamera = null;
 		new Handler().post(new Thread() {
 			@Override
 			public void run() {
-				final Button takePicture = (Button) findViewById(R.id.takepicture);
+				final Button takePicture = (Button)findViewById(R.id.takepicture);
 				if (takePicture != null) {
 					takePicture.setVisibility(View.GONE);
-					Button takeNewPicture = (Button) findViewById(R.id.takenewpicture);
+					Button takeNewPicture = (Button)findViewById(R.id.takenewpicture);
 					takeNewPicture.setVisibility(View.VISIBLE);
 				}
 			}

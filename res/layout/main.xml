@@ -1,169 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
- android:orientation="horizontal"
- android:layout_width="fill_parent"
- android:layout_height="fill_parent"
- android:gravity="bottom"
- >
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
- android:orientation="vertical"
- android:layout_width="wrap_content"
- android:layout_height="fill_parent"
- android:gravity="bottom"
- >
-
-    <RelativeLayout
-        android:id="@+id/relativeLayout2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >    
-	    <ProgressBar
-	        android:id="@+id/loadingSE"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignTop="@+id/switchEffect"
-	        android:layout_centerHorizontal="true"
-	        android:visibility="invisible"
-	        android:onClick="onShowBar" />
-        <Button
-	        android:id="@+id/switchEffect"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text=""
-			android:background="@drawable/icon64"
-	        android:layout_marginTop="20dp"
-	        android:layout_gravity="center_vertical"
-	        android:onClick="toggleEffects" />
-	</RelativeLayout>
-    <TextView
-        android:id="@+id/switchEffectLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/original"
-        android:layout_gravity="center"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textSize="12dp" />
-    
-    <RelativeLayout
-        android:id="@+id/relativeLayout3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
-	    <ProgressBar
-	        android:id="@+id/loadingSSE"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignTop="@+id/switchSeekEffect"
-	        android:layout_centerHorizontal="true"
-	        android:visibility="invisible" />
-    <Button
-        android:id="@+id/switchSeekEffect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-		android:background="@drawable/alpha"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="bottom" />
-	</RelativeLayout>
-    <TextView
-        android:id="@+id/switchSeekEffectLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/alpha"
-        android:layout_gravity="center"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textSize="12dp" />
-
-</LinearLayout>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
- android:orientation="vertical"
- android:layout_width="fill_parent"
- android:layout_height="fill_parent"
- android:gravity="bottom"
- >
-<Button
-android:id="@+id/takepicture"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:text="@string/takepicture"
-android:background="@drawable/picture"
-android:layout_gravity="right"
-/>
-<LinearLayout android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:orientation="vertical"
-      android:visibility="gone"
-      android:layout_gravity="right" 
-      android:id="@+id/takenewpicturewrapper"
-      android:gravity="center">
-<Button
-android:id="@+id/takenewpicture"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:background="@drawable/newpicture"
-android:layout_gravity="right"
-/>
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/takenewpicture"
-    android:layout_gravity="center"
-    android:textAppearance="?android:attr/textAppearanceSmall"
-    android:textSize="12dp" />
-</LinearLayout>
-<LinearLayout android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:orientation="vertical"
-      android:layout_gravity="right" 
-android:visibility="gone"
-      android:id="@+id/screenshotwrapper"
-      android:gravity="center"
-      android:layout_marginTop="10dp">
-<Button
-android:id="@+id/takescreenshot"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:background="@drawable/screenshot"
-android:layout_gravity="right"
-/>
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/screenshot"
-    android:layout_gravity="center"
-    android:textAppearance="?android:attr/textAppearanceSmall"
-    android:textSize="12dp" />
-</LinearLayout>
-<LinearLayout android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:orientation="vertical"
-      android:layout_gravity="right" 
-      android:gravity="center"
-      android:id="@+id/loadimagewrapper"
-android:layout_marginTop="10dp"
-android:layout_marginBottom="10dp">
-<Button
-android:id="@+id/loadimage"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:background="@drawable/open"
-/>
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/loadfile"
-    android:layout_gravity="center"
-    android:textAppearance="?android:attr/textAppearanceSmall"
-    android:textSize="12dp" />
-</LinearLayout>
-<SeekBar
-    android:id="@+id/alphaValue"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="clip_horizontal"
-    android:max="255"
-    android:progress="128"
+    android:layout_height="fill_parent"
     android:gravity="bottom"
-    android:layout_marginLeft="5dp" >
-</SeekBar>
-</LinearLayout>
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:gravity="bottom"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <ProgressBar
+                android:id="@+id/loadingSE"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/switchEffect"
+                android:layout_centerHorizontal="true"
+                android:onClick="onShowBar"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/switchEffect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/icon64"
+                android:onClick="toggleEffects"
+                android:text="" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/switchEffectLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/effectsgroup"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="12dp" />
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <ProgressBar
+                android:id="@+id/loadingSSE"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/switchSeekEffect"
+                android:layout_centerHorizontal="true"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/switchSeekEffect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/alpha"
+                android:text="" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/switchSeekEffectLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/alpha"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="12dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="bottom"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/takepicture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="@drawable/picture"
+            android:text="@string/takepicture" />
+
+        <LinearLayout
+            android:id="@+id/takenewpicturewrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <Button
+                android:id="@+id/takenewpicture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:background="@drawable/newpicture" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/takenewpicture"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="12dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/screenshotwrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <Button
+                android:id="@+id/takescreenshot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:background="@drawable/screenshot" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/screenshot"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="12dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/loadimagewrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/loadimage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/open" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/loadfile"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="12dp" />
+        </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/alphaValue"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="clip_horizontal"
+            android:layout_marginLeft="5dp"
+            android:gravity="bottom"
+            android:max="255"
+            android:progress="128" >
+        </SeekBar>
+    </LinearLayout>
+
 </LinearLayout>
