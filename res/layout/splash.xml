@@ -6,7 +6,7 @@
  android:gravity="center"
  android:weightSum="1">
     <Button android:layout_width="wrap_content" android:text="" android:id="@+id/button1" android:layout_height="wrap_content" android:layout_weight="0" android:background="@drawable/icon"></Button> 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout 
  android:orientation="vertical"
  android:layout_width="wrap_content"
  android:layout_height="fill_parent"

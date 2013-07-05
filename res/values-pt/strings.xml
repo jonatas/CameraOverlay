@@ -46,4 +46,5 @@
     <string name="help_about_camera_overlay_directory">Esse é o diretório onde ficam todas as fotos em que até a foto base é tirada pelo Camera Overlay</string>
     <string name="default_settings">Configurações</string>
     <string name="choose_the_file">Escolha uma imagem</string>
+    <string name="screenshot">Screenshot</string>
 </resources>

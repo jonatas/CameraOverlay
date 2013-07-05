@@ -45,4 +45,6 @@
     <string name="pref_where_save">¿Dónde guarda las fotos</string>
     <string name="help_about_camera_overlay_directory">Es el directorio que guarda todas las imágenes cuando se tomó la base de la primera foto en lugar de utilizar su álbum</string>
     <string name="default_settings">Configuración</string>
+    <string name="choose_the_file">Choose image</string>
+    <string name="screenshot">Screenshot</string>
 </resources>

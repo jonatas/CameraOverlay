@@ -6,7 +6,6 @@
     android:orientation="horizontal" >
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:gravity="bottom"
@@ -23,7 +22,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/switchEffect"
                 android:layout_centerHorizontal="true"
-                android:onClick="onShowBar"
                 android:visibility="invisible" />
 
             <Button
@@ -81,7 +79,6 @@
     </LinearLayout>
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:gravity="bottom"

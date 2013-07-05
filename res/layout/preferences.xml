@@ -1,31 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
 
-    <PreferenceCategory 
-        android:title="@string/default_settings"
-        android:key="first_category">
-        
-        <CheckBoxPreference 
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:key="first_category"
+        android:title="@string/default_settings" >
+
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
             android:key="mix_effects"
             android:summary="@string/mix_effects_summary"
-            android:title="@string/mix_effects_title" 
-            android:defaultValue="true"
-        />
-          
-            
+            android:title="@string/mix_effects_title" />
     </PreferenceCategory>
 
-    <PreferenceCategory 
-        android:title="@string/pref_where_save"
-        android:key="second_category">
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:key="second_category"
+        android:title="@string/pref_where_save" >
 
         <EditTextPreference
-            android:key="camera_overlay_directory"
-            android:title="@string/title_camera_overlay_directory" 
-            android:summary="@string/help_about_camera_overlay_directory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="/sdcard/CameraOverlay/"
+            android:dialogMessage="@string/set_new_directory_to_camera_overlay"
             android:dialogTitle="@string/title_camera_overlay_directory"
-            android:dialogMessage="@string/set_new_directory_to_camera_overlay"    
-            android:defaultValue="/sdcard/CameraOverlay/" />
-
+            android:key="camera_overlay_directory"
+            android:summary="@string/help_about_camera_overlay_directory"
+            android:title="@string/title_camera_overlay_directory" />
     </PreferenceCategory>
+
 </PreferenceScreen>

@@ -114,7 +114,7 @@ public final class R {
         public static final int alpha5=0x7f040018;
         public static final int app_name=0x7f040000;
         public static final int cancel=0x7f040027;
-        public static final int choose_the_file=0x7f04002e;
+        public static final int choose_the_file=0x7f04002d;
         public static final int contrast_bw=0x7f040019;
         public static final int default_settings=0x7f04002c;
         public static final int description=0x7f040001;
@@ -142,7 +142,7 @@ public final class R {
         public static final int retry=0x7f040026;
         public static final int savingAs=0x7f04000b;
         public static final int savingLayeredPicAs=0x7f040024;
-        public static final int screenshot=0x7f04002d;
+        public static final int screenshot=0x7f04002e;
         public static final int selectafile=0x7f04000c;
         public static final int set_new_directory_to_camera_overlay=0x7f040028;
         public static final int successsaved=0x7f040009;

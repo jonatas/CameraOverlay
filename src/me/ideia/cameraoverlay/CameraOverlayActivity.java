@@ -18,6 +18,7 @@ import android.graphics.Canvas;
 import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
@@ -298,7 +299,7 @@ public class CameraOverlayActivity extends Activity {
 				}
 
 				Intent i = new Intent(CameraOverlayActivity.this, FilePickerActivity.class);
-				i.putExtra(FilePickerActivity.EXTRA_FILE_PATH, "/sdcard/CameraOverlay/");
+				i.putExtra(FilePickerActivity.EXTRA_FILE_PATH, Environment.getExternalStorageDirectory().getPath() + "CameraOverlay/");
 				String[] filter = new String[] { "jpg", "jpeg", "png", "bmp", "gif" };
 				i.putExtra(FilePickerActivity.EXTRA_ACCEPTED_FILE_EXTENSIONS, filter);
 				startActivityForResult(i, 1);
