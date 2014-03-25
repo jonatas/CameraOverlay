@@ -379,7 +379,7 @@ public class PhotoEffects extends View {
 		invalidate();
 	}
 
-	public int getAlpha() {
+	public int getAlphaValue() {
 		return alpha;
 	}
 

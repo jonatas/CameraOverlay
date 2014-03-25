@@ -368,7 +368,7 @@ public class CameraOverlayActivity extends Activity {
 							seekEffect = 0;
 						switch (seekEffect) {
 							case 0:
-								alphaValue.setProgress(photoBase.getAlpha());
+								alphaValue.setProgress((int)photoBase.getAlphaValue());
 								switchSeekEffect.setBackgroundResource(R.drawable.alpha);
 								switchSeekEffectLabel.setText(getString(R.string.alpha));
 								break;
