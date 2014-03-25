@@ -40,11 +40,15 @@
     <string name="error_get_camera_preview">Erro tentando usar a visualização da camera</string>
     <string name="retry">Tentar novamente</string>
     <string name="cancel">Cancelar</string>
-    <string name="set_new_directory_to_camera_overlay">Altere o diretório padrão do Camera Overlay, talvez você não tenha um sdcard...</string>
+    <string name="set_new_directory_to_camera_overlay">Altere o diretório padrão do Camera Overlay, talvez você não tenha um sdcard.</string>
     <string name="title_camera_overlay_directory">Diretório de destino das fotos</string>
     <string name="pref_where_save">Onde salvar as fotos</string>
     <string name="help_about_camera_overlay_directory">Esse é o diretório onde ficam todas as fotos em que até a foto base é tirada pelo Camera Overlay</string>
     <string name="default_settings">Configurações</string>
     <string name="choose_the_file">Escolha uma imagem</string>
     <string name="screenshot">Screenshot</string>
+    <string name="valor_1">Valor 1</string>
+    <string name="valor_2">Valor 2</string>
+    <string name="salvar">Salvar</string>
+    <string name="digite_aqui">Digite aqui</string>
 </resources>

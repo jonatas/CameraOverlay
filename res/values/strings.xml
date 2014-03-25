@@ -47,4 +47,8 @@
     <string name="default_settings">Settings</string>
     <string name="choose_the_file">Choose image</string>
     <string name="screenshot">Screenshot</string>
+    <string name="valor_1">Valor 1</string>
+    <string name="valor_2">Valor 2</string>
+    <string name="salvar">Salvar</string>
+    <string name="digite_aqui">Digite aqui</string>
 </resources>

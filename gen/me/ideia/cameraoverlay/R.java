@@ -119,6 +119,7 @@ public final class R {
         public static final int default_settings=0x7f04002c;
         public static final int description=0x7f040001;
         public static final int developed=0x7f040006;
+        public static final int digite_aqui=0x7f040032;
         public static final int dontsaved=0x7f04000a;
         public static final int edgedetect=0x7f04001a;
         public static final int edgedetecttransparent=0x7f04001b;
@@ -140,6 +141,7 @@ public final class R {
         public static final int preferences=0x7f040021;
         public static final int project=0x7f040007;
         public static final int retry=0x7f040026;
+        public static final int salvar=0x7f040031;
         public static final int savingAs=0x7f04000b;
         public static final int savingLayeredPicAs=0x7f040024;
         public static final int screenshot=0x7f04002e;
@@ -150,6 +152,8 @@ public final class R {
         public static final int takepicture=0x7f040003;
         public static final int title_camera_overlay_directory=0x7f040029;
         public static final int url=0x7f040008;
+        public static final int valor_1=0x7f04002f;
+        public static final int valor_2=0x7f040030;
         public static final int vertical=0x7f04001d;
         public static final int waitloadimages=0x7f04000d;
     }
