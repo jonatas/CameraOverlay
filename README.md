@@ -2,4 +2,4 @@
 
 Android app, free on google play.
 
-See more at http://ideia.me/camera-overlay/
+See more at http://ideia.me/camera-overlay
